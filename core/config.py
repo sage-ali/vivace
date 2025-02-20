@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
 
-load_dotenv("../env")
+load_dotenv("../.env")
 
 
 class Settings(BaseSettings):
@@ -23,21 +23,21 @@ telex_integration_config = {
     "data": {
         "date": {
             "created_at": "2025-02-20",
-            "updated_at": "2025-02-21"
+            "updated_at": "2025-02-20"
         },
         "descriptions": {
             "app_description": settings.PROJECT_DESCRIPTION,
-            "app_logo": "URL to the application logo.",
+            "app_logo": f"{os.getenv('BASE_URL')}/logo.png",
             "app_name": settings.PROJECT_NAME,
-            "app_url": "URL to the application or service.",
-            "background_color": "#FFFFFF"
+            "app_url": f"{os.getenv('BASE_URL')}",
+            "background_color": "#4BEBA4"
         },
         "integration_category": "AI & Machine Learning",
         "integration_type": "modifier",
         "is_active": True,
         "output": [
             {
-                "label": "output_channel_1",
+                "label": "value",
                 "value": True
             }
         ],
@@ -62,45 +62,12 @@ telex_integration_config = {
         "settings": [
             {
                 # Separate multiple sources with
-                "label": "Knowledge Base URL",
+                "label": "Knowledge Base URL(separate multiple sources with commas)",
                 "type": "text",
                 "required": True,
                 "default": "https://company-wiki.example.com"
-            },
-            {
-                "label": "Embedding Model",
-                "type": "dropdown",
-                "required": True,
-                "default": "BERT",
-                "options": [
-                    "BERT",
-                    "RoBERTa",
-                    "Sentence Transformers"
-                ]
-            },
-            {
-                "label": "Vector Database",
-                "type": "dropdown",
-                "required": True,
-                "default": "FAISS",
-                "options": [
-                    "FAISS",
-                    "Annoy"
-                ]
-            },
-            {
-                "label": "Context Window Size",
-                "type": "number",
-                "required": True,
-                "default": 500
-            },
-            {
-                "label": "Enable Debug Logging",
-                "type": "checkbox",
-                "required": True,
-                "default": True
             }
         ],
-        "target_url": f"{os.getenv("BASE_URL")}/webhook"
+        "target_url": f"{os.getenv('BASE_URL')}{settings.API_PREFIX}/vivace"
     }
 }

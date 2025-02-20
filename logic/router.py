@@ -18,7 +18,7 @@ api_router = APIRouter()
 
 
 # Load environment variables from .env file
-load_dotenv('.env')
+load_dotenv('../.env')
 
 
 # Main execution
@@ -45,9 +45,8 @@ async def modify_message(request: RequestData):
     """
     try:
         # data = await request.json()
-        data = request.json()
         # message = data.get("message")
-        message = data
+        message = request.message
         if not message:
             raise HTTPException(
                 status_code=400, detail="Missing 'message' in request body")
@@ -56,6 +55,7 @@ async def modify_message(request: RequestData):
         vector_store = await get_vector_db()
         similar_docs = similar_from_db_tool(query, vector_store)
         response = generate_response(query, similar_docs, "https://aws.amazon.com/what-is/retrieval-augmented-generation/", 2000)
+        print("Message: ", message)
 
         return JSONResponse({"message": response})
     except HTTPException as e:
