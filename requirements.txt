@@ -1,0 +1,13 @@
+fastapi
+sentence-transformers
+langchain
+langchain_community
+langchain_openai
+faiss-cpu
+pypdf2
+pypdf
+openai
+python-dotenv
+pytest
+pytest-asyncio
+uvicorn
