@@ -16,7 +16,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import CharacterTextSplitter
 
 # Load environment variables from .env file
-load_dotenv('../.env')
+load_dotenv('../../.env')
 
 
 def run_in_executor(func):
