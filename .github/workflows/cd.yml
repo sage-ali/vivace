@@ -1,0 +1,59 @@
+name: CD Pipeline
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        run: |
+          echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+      - name: Set up timestamp
+        id: timestamp
+        run: echo "TIMESTAMP=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/vivace:${{ env.TIMESTAMP }}
+      # Trigger deployment on Render
+      - name: Deploy
+        # Only run this step if the branch is main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "Deploying to Render"
+          curl --request PATCH \
+            --url https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }} \
+            --header 'accept: application/json' \
+            --header 'authorization: Bearer ${{ secrets.RENDER_API_KEY }}' \
+            --header 'content-type: application/json' \
+            --data '{
+                "image": {
+                    "ownerId": "${{ secrets.RENDER_ACCOUNT_ID }}",
+                    "imagePath": "docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/vivace:${{ env.TIMESTAMP }}"
+                }
+            }'
+          if [ $? -ne 0 ]; then
+            echo "Render API deployment failed."
+            exit 1
+          fi
+
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      - run: |
+          echo "Calling the deploy hook"
+          sleep 15
+          curl -X GET "$deploy_url"
