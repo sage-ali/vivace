@@ -50,10 +50,7 @@ jobs:
             echo "Render API deployment failed."
             exit 1
           fi
-
-        env:
-          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-      - run: |
+          sleep 2
           echo "Calling the deploy hook"
-          sleep 15
-          curl -X GET "$deploy_url"
+          curl -X GET "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          sleep 100
