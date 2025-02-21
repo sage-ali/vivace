@@ -21,14 +21,14 @@ jobs:
 
       - name: Set up timestamp
         id: timestamp
-        run: echo "::set-output name=TIMESTAMP::$(date +%Y%m%d%H%M%S)"
+        run: echo "TIMESTAMP=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/vivace:${{ steps.timestamp.outputs.TIMESTAMP }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/vivace:${{ env.TIMESTAMP }}
       # Trigger deployment on Render
       - name: Deploy
         # Only run this step if the branch is main
@@ -43,18 +43,16 @@ jobs:
             --data '{
                 "image": {
                     "ownerId": "${{ secrets.RENDER_ACCOUNT_ID }}",
-                    "imagePath": "docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/vivace:${{ steps.timestamp.outputs.TIMESTAMP }}"
+                    "imagePath": "docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/vivace:${{ env.TIMESTAMP }}"
                 }
-
             }'
-            if [ $? -ne 0 ]; then
+          if [ $? -ne 0 ]; then
             echo "Render API deployment failed."
             exit 1
-            fi
+          fi
 
         env:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-          # Adding method for curl
       - run: |
           echo "Calling the deploy hook"
           sleep 15
