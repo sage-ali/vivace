@@ -42,9 +42,6 @@ async def load_settings():
     """
     Loads settings from a JSON file.
 
-    Args:
-        file_path (str): Path to the JSON file to load.
-
     Returns:
         dict: The loaded settings.
 
@@ -70,3 +67,6 @@ async def get_logo():
     logo_path = "./assets/vivace_logo.png"
     return FileResponse(logo_path)
 
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
