@@ -33,7 +33,8 @@ async def get_vector_db():
     return vector_store
 
 class RequestData(BaseModel):
-    message: str = Field(..., example="Your test message here")
+    settings: list = Field(..., example=[{"label": "Knowledge Base URL(separate multiple sources with commas)", "type": "text", "required": True, "default": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"}])
+    message: str = Field(..., example="This is a test message that will be formatted.")
 
 @api_router.post("/vivace")
 async def modify_message(request: RequestData):
@@ -52,17 +53,15 @@ async def modify_message(request: RequestData):
                 status_code=400, detail="Missing 'message' in request body")
 
         query = message
-        vector_store = await get_vector_db()
-        similar_docs = similar_from_db_tool(query, vector_store)
-        response = generate_response(query, similar_docs, "https://aws.amazon.com/what-is/retrieval-augmented-generation/", 2000)
-        print("Message: ", message)
-
-        return JSONResponse({"message": response})
+        # Retrieve vector store and perform similarity search
+        # Todo: Add the similarity search later
+        # vector_store = await get_vector_db()
+        # similar_docs = similar_from_db_tool(query, vector_store)
+        # response = generate_response(query, request.settings[0]["default"], similar_docs, 2000)
+        response = generate_response(query, request.settings[0]["default"])
+        return JSONResponse({"message": response,
+                             "settings": request.settings[0]["default"]})
     except HTTPException as e:
         raise e
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)

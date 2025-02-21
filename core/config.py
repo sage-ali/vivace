@@ -65,7 +65,7 @@ telex_integration_config = {
                 "label": "Knowledge Base URL(separate multiple sources with commas)",
                 "type": "text",
                 "required": True,
-                "default": "https://company-wiki.example.com"
+                "default": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"
             }
         ],
         "target_url": f"{os.getenv('BASE_URL')}{settings.API_PREFIX}/vivace"
