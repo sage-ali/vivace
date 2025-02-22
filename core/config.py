@@ -3,9 +3,7 @@ import os
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
-
 load_dotenv("../.env")
-
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Vivace"
@@ -15,7 +13,6 @@ class Settings(BaseSettings):
     SECRET_KEY: str = secrets.token_urlsafe(32)
     DEBUG: bool = False
     TESTING: bool = False
-
 
 settings = Settings()
 
@@ -48,23 +45,9 @@ telex_integration_config = {
             "Uses Retrieval-Augmented Generation (RAG) for enhanced responses.",
             "Improves collaboration and information access for DevOps and Software teams."
         ],
-        "permissions": {
-            "events": [
-				"Receive messages from Telex channels.",
-				"Get AI-generated responses to user queries.",
-				"Send responses back to the channel.",
-				"Log activity for auditing purposes."
-			]
-        },
-        "settings": [
-            {
-                # Separate multiple sources with
-                "label": "Knowledge Base URL(separate multiple sources with commas)",
-                "type": "text",
-                "required": True,
-                "default": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"
-            }
-        ],
-        "target_url": f"{os.getenv('BASE_URL')}{settings.API_PREFIX}/vivace"
+        "settings": [],  # Removed dynamic settings from here
+        "website": f"{os.getenv('BASE_URL')}",
+        "target_url": f"{os.getenv('BASE_URL')}{settings.API_PREFIX}/vivace",
+        "tick_url": f"{os.getenv('BASE_URL')}{settings.API_PREFIX}/vivace"
     }
 }
