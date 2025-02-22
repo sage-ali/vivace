@@ -28,12 +28,14 @@ def generate_response(query, knowledge_base_url):
     max_retries = 3
     for attempt in range(max_retries):
         try:
+            logger.info(f"Attempting to generate response (attempt {attempt + 1})")
             response = chat_model.invoke(messages)
             if response:
                 logger.info(f"Successfully generated response in {attempt + 1} attempts")
                 return response.content
         except Exception as e:
             logger.error(f"Error calling Gemini API (attempt {attempt + 1}): {e}")
+    logger.warning("Failed to generate response after multiple retries")
     return ""
 
 if __name__ == "__main__":

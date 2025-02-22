@@ -50,14 +50,15 @@ async def modify_message(request: RequestData):
     response with a single key, "message", containing the modified message.
     """
     try:
-        # data = await request.json()
-        # message = data.get("message")
+        logger.info(f"Received request: {request}")
+
         message = request.message
         if not message:
             raise HTTPException(
                 status_code=400, detail="Missing 'message' in request body")
 
         extracted_settings = extract_settings(request.settings)
+        logger.info(f"Extracted settings: {extracted_settings}")
         knowledge_base_url = extracted_settings.get("Knowledge Base URL(separate multiple sources with commas)", "")
 
         query = message
@@ -67,6 +68,7 @@ async def modify_message(request: RequestData):
         # vector_store = await get_vector_db()
         # similar_docs = similar_from_db_tool(query, vector_store)
         # response = generate_response(query, request.settings[0]["default"], similar_docs, 2000)
+        logger.info(f"Calling generate_response with query: {query} and knowledge_base_url: {knowledge_base_url}")
         response = generate_response(query, knowledge_base_url)
         return JSONResponse({
             "event_name": "RAG_response",
