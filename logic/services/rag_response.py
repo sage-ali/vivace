@@ -14,7 +14,7 @@ def generate_response(query, knowledge_base_url):
     system_message = (
         f"Use the following knowledge base URL: {knowledge_base_url} to answer the user's query. "
         f"Answer directly, paraphrasing from the knowledge base if available."
-        f"Do not generate more than 150 words."
+        f"Do not generate more than 100 words."
     )
     messages = [
         {"role": "system", "content": system_message},
@@ -23,8 +23,8 @@ def generate_response(query, knowledge_base_url):
         # {"role": "assistant", "content": "\n\n".join(similar_docs)}
     ]
 
-    chat_model = ChatGoogleGenerativeAI(model="gemini-1.5-flash-001")
-    chat_model.max_output_tokens = 150
+    chat_model = ChatGoogleGenerativeAI(model="gemini-1.5-pro")
+    chat_model.max_output_tokens = 100
     max_retries = 3
     for attempt in range(max_retries):
         try:

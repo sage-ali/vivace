@@ -71,7 +71,7 @@ async def modify_message(request: RequestData):
         logger.info(f"Calling generate_response with query: {query} and knowledge_base_url: {knowledge_base_url}")
         response = generate_response(query, knowledge_base_url)
         return JSONResponse({
-            "event_name": "RAG_response",
+            "event_name": "message_formatted",
             "message": response,
             "status": "success",
             "username": settings.PROJECT_NAME
