@@ -11,8 +11,24 @@ from logic.utilities.html_parser import get_website_content
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 # def generate_response(query, knowledge_base_url, similar_docs, context_window_size):
 def generate_response(query, knowledge_base_url):
+    """
+    Generates a response to a given query using content from a specified knowledge base URL(s).
+
+    Args:
+        query (str): The user's query for which a response is to be generated.
+        knowledge_base_url (str): The URL(s) of the knowledge base to retrieve content from.
+
+    Returns:
+        str: The generated response to the query, utilizing content from the knowledge base
+             if available. If content retrieval fails or is insufficient, a general response is provided.
+
+    Raises:
+        Exception: If an error occurs while invoking the chat model.
+    """
+
     logger.info(
         f"Generating response for query: {query} using knowledge base: {knowledge_base_url}"
     )
@@ -55,6 +71,7 @@ def generate_response(query, knowledge_base_url):
             logger.error(f"Error calling Gemini API (attempt {attempt + 1}): {e}")
     logger.warning("Failed to generate response after multiple retries")
     return ""
+
 
 if __name__ == "__main__":
     import sys
