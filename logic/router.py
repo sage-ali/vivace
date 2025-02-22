@@ -1,6 +1,7 @@
 import os
 import logging
 from logic.services.rag_response import generate_response
+
 # from logic.services.vector_database import (
 #     retrieve_vector_database,
 #     similar_from_db_tool
@@ -9,6 +10,7 @@ from logic.services.rag_response import generate_response
 from dotenv import load_dotenv
 from fastapi.responses import JSONResponse
 from fastapi import Request, HTTPException, APIRouter
+
 # from sentence_transformers import SentenceTransformer
 from pydantic import BaseModel, Field
 from typing import Optional
@@ -17,12 +19,16 @@ from core.settings import extract_settings
 import markdownify
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[logging.FileHandler("app.log"), logging.StreamHandler()],
+)
 logger = logging.getLogger(__name__)
 api_router = APIRouter()
 
 # Load environment variables from .env file
-load_dotenv('../.env')
+load_dotenv("../.env")
 
 
 # Main execution
@@ -41,6 +47,7 @@ load_dotenv('../.env')
 #     settings: list = Field(..., example=[{"label": "Knowledge Base URL(separate multiple sources with commas)", "type": "text", "required": True, "default": "https://aws.amazon.com/what-is/retrieval-augmented_generation/"}])
 #     message: str = Field(..., example="This is a test message that will be formatted.")
 
+
 @api_router.post("/vivace")
 async def modify_message(request: Request):
     """
@@ -55,15 +62,17 @@ async def modify_message(request: Request):
         message = data.get("message")
         if not message:
             raise HTTPException(
-                status_code=400, detail="Missing 'message' in request body")
+                status_code=400, detail="Missing 'message' in request body"
+            )
 
         settings_list = data.get("settings", [])
         extracted_settings = extract_settings(settings_list)
         logger.info(f"Extracted settings: {extracted_settings}")
-        knowledge_base_url = extracted_settings.get("Knowledge Base URL(separate multiple sources with commas)", "")
+        knowledge_base_url = extracted_settings.get(
+            "Knowledge Base URL(separate multiple sources with commas)", ""
+        )
 
-
-          # Retrieve vector store and perform similarity search
+        # Retrieve vector store and perform similarity search
         # Todo: Add the similarity search later
         # channel_id to be use for data storage and tracking
         # vector_store = await get_vector_db()
@@ -73,7 +82,9 @@ async def modify_message(request: Request):
         logger.info(f"Converted message to Markdown: {markdown_message}")
 
         query = markdown_message
-        logger.info(f"Calling generate_response with query: {query} and knowledge_base_url: {knowledge_base_url}")
+        logger.info(
+            f"Calling generate_response with query: {query} and knowledge_base_url: {knowledge_base_url}"
+        )
         # vector_store = await get_vector_db()
         # similar_docs = similar_from_db_tool(query, vector_store)
 
@@ -81,12 +92,14 @@ async def modify_message(request: Request):
         # similar_docs = similar_from_db_tool(query, vector_store)
 
         response = generate_response(query, knowledge_base_url)
-        return JSONResponse({
-            "event_name": "message_formatted",
-            "message": response,
-            "status": "success",
-            "username": settings.PROJECT_NAME
-        })
+        return JSONResponse(
+            {
+                "event_name": "message_formatted",
+                "message": response,
+                "status": "success",
+                "username": settings.PROJECT_NAME,
+            }
+        )
     except HTTPException as e:
         logger.exception(f"HTTPException: {e}")
         raise e

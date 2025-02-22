@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_website_content(urls):
+    """Extracts text from HTML and PDF files, handling multiple URLs and errors."""
     text_content = ""
     errors = []
     for url_str in urls.split(","):

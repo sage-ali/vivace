@@ -25,7 +25,7 @@ load_dotenv(".env")
 app = FastAPI(
     title="Vivace Integration API",
     description="API for the Vivace Integration",
-    version="0.1.0",
+    version="0.0.1",
     docs_url="/docs",
     redoc_url="/redoc",
 )
@@ -68,7 +68,7 @@ async def load_settings(request: Request):
     Loads settings from a JSON file.
 
     Returns:
-        dict: The loaded settings.
+        JSONResponse: The loaded settings.
 
     Raises:
         HTTPException: If the file is not found or the JSON is invalid.
@@ -77,8 +77,13 @@ async def load_settings(request: Request):
     body = await request.body()
     if body:
         logger.info(f"Received data: {body.decode('utf-8')}")
-    telex_integration_config["data"]["settings"] = dynamic_settings
-    return JSONResponse(telex_integration_config)
+    try:
+
+        telex_integration_config["data"]["settings"] = dynamic_settings
+        return JSONResponse(telex_integration_config)
+    except Exception as e:
+        logger.error(f"Error loading integration settings: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
 # @app.post("/update_settings")
@@ -135,7 +140,7 @@ async def get_logo():
     Serves the Vivace logo image.
 
     Returns:
-        FileResponse: The SVG image file.
+        FileResponse: The PNG image file.
     """
     logger.info("Serving logo image")
     logo_path = "./assets/vivace_logo.png"
