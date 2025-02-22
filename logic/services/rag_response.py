@@ -2,9 +2,15 @@ import time
 from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import BaseModel, Field
 from typing import Optional, Union
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # def generate_response(query, knowledge_base_url, similar_docs, context_window_size):
 def generate_response(query, knowledge_base_url):
+    logger.info(f"Generating response for query: {query} using knowledge base: {knowledge_base_url}")
     system_message = (
         f"Use the following knowledge base URL: {knowledge_base_url} to answer the user's query. "
         f"Answer directly, paraphrasing from the knowledge base if available."
@@ -24,9 +30,10 @@ def generate_response(query, knowledge_base_url):
         try:
             response = chat_model.invoke(messages)
             if response:
+                logger.info(f"Successfully generated response in {attempt + 1} attempts")
                 return response.content
         except Exception as e:
-            print(f"Error calling Gemini API (attempt {attempt + 1}): {e}")
+            logger.error(f"Error calling Gemini API (attempt {attempt + 1}): {e}")
     return ""
 
 if __name__ == "__main__":

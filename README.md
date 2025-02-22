@@ -21,10 +21,11 @@ The Vivace Integration API enhances user queries with relevant information retri
 
 - Python 3.10+
 - FastAPI
-- FAISS
 - Sentence Transformers
 - Langchain Community
 - Google Generative AI
+- Uvicorn
+- Python-dotenv
 
 ## Setup
 
@@ -43,7 +44,16 @@ To modify a message, send a POST request to `/api/vivace` with the following JSO
 
 ```json
 {
-    "message": "Tell me about RAG."
+  "channel_id": "0192dd70-cdf1-7e15-8776-4fee4a78405e",
+  "settings": [
+    {
+      "label": "Knowledge Base URL(separate multiple sources with commas)",
+      "type": "text",
+      "required": true,
+      "default": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"
+    }
+  ],
+  "message": "Tell me about RAG."
 }
 ```
 

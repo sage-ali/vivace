@@ -6,6 +6,7 @@ from tests import client
 async def test_modify_message(client):
     response = client.post(
         "/api/vivace", json={
+            "channel_id": "0192dd70-cdf1-7e15-8776-4fee4a78405e",
             "settings": [
                 {
                     "label": "Knowledge Base URL(separate multiple sources with commas)",
@@ -14,7 +15,7 @@ async def test_modify_message(client):
                     "default": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"
                 }
             ],
-            "message": "This is a test message that will be formatted."
+            "message": "What is RAG?"
         })
     print(f"Response status: {response.status_code}, Response body: {response.json()}")
     assert response.status_code == 200
