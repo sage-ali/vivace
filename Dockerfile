@@ -21,6 +21,10 @@ RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 # Copy the Supervisor configuration
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Create log directories for Nginx and Uvicorn
+RUN mkdir -p /var/log/nginx && \
+    mkdir -p /var/log/uvicorn
+
 # Expose the ports for Nginx and Uvicorn
 EXPOSE 80 8000
 
