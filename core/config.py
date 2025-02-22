@@ -21,7 +21,7 @@ settings = Settings()
 
 telex_integration_config = {
     "data": {
-        "authour": "Sage21",
+        "author": "Sage21",
         "date": {
             "created_at": "2025-02-20",
             "updated_at": "2025-02-20"
