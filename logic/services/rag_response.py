@@ -3,12 +3,13 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import BaseModel, Field
 from typing import Optional, Union
 import logging
+
 from logic.utilities.html_parser import get_website_content
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 # def generate_response(query, knowledge_base_url, similar_docs, context_window_size):
 def generate_response(query, knowledge_base_url):
@@ -39,6 +40,7 @@ def generate_response(query, knowledge_base_url):
 
     chat_model = ChatGoogleGenerativeAI(model="gemini-1.5-pro")
     chat_model.max_output_tokens = 200
+
     max_retries = 3
     for attempt in range(max_retries):
         try:
@@ -48,12 +50,11 @@ def generate_response(query, knowledge_base_url):
                 logger.info(
                     f"Successfully generated response in {attempt + 1} attempts"
                 )
-                return f"Query: {query}\n\nResponse: {response.content}"
+                return f"Query: {query}\nResponse: {response.content}"
         except Exception as e:
             logger.error(f"Error calling Gemini API (attempt {attempt + 1}): {e}")
     logger.warning("Failed to generate response after multiple retries")
     return ""
-
 
 if __name__ == "__main__":
     import sys
