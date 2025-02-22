@@ -21,6 +21,7 @@ settings = Settings()
 
 telex_integration_config = {
     "data": {
+        "authour": "Sage21",
         "date": {
             "created_at": "2025-02-20",
             "updated_at": "2025-02-20"
@@ -35,12 +36,6 @@ telex_integration_config = {
         "integration_category": "AI & Machine Learning",
         "integration_type": "modifier",
         "is_active": True,
-        "output": [
-            {
-                "label": "value",
-                "value": True
-            }
-        ],
         "key_features": [
             "Faster Access to Information",
             "Improved Collaboration",
@@ -54,10 +49,12 @@ telex_integration_config = {
             "Improves collaboration and information access for DevOps and Software teams."
         ],
         "permissions": {
-            "monitoring_user": {
-                "always_online": True,
-                "display_name": "Vivace"
-            }
+            "events": [
+				"Receive messages from Telex channels.",
+				"Get AI-generated responses to user queries.",
+				"Send responses back to the channel.",
+				"Log activity for auditing purposes."
+			]
         },
         "settings": [
             {

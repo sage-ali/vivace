@@ -53,4 +53,4 @@ jobs:
           sleep 2
           echo "Calling the deploy hook"
           curl -X GET "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
-          sleep 100
+          sleep 15
