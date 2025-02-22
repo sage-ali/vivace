@@ -2,16 +2,16 @@ import os
 
 
 from logic.services.rag_response import generate_response
-from logic.services.vector_database import (
-    retrieve_vector_database,
-    similar_from_db_tool
-)
+# from logic.services.vector_database import (
+#     retrieve_vector_database,
+#     similar_from_db_tool
+# )
 
 from dotenv import load_dotenv
 import uvicorn
 from fastapi.responses import JSONResponse
 from fastapi import Request, HTTPException, APIRouter
-from sentence_transformers import SentenceTransformer
+# from sentence_transformers import SentenceTransformer
 from pydantic import BaseModel, Field
 
 api_router = APIRouter()
@@ -22,15 +22,15 @@ load_dotenv('../.env')
 
 
 # Main execution
-pdf_path = os.path.abspath("logic/data/retrieval-augmented_generation.pdf")
-model_name = 'all-MiniLM-L6-v2'
-index_path = os.path.abspath("logic/data/faiss_index")
+# pdf_path = os.path.abspath("logic/data/retrieval-augmented_generation.pdf")
+# model_name = 'all-MiniLM-L6-v2'
+# index_path = os.path.abspath("logic/data/faiss_index")
 
-embedding_model = SentenceTransformer(model_name).encode
+# embedding_model = SentenceTransformer(model_name).encode
 
-async def get_vector_db():
-    vector_store = await retrieve_vector_database(index_path, embedding_model)
-    return vector_store
+# async def get_vector_db():
+#     vector_store = await retrieve_vector_database(index_path, embedding_model)
+#     return vector_store
 
 class RequestData(BaseModel):
     settings: list = Field(..., example=[{"label": "Knowledge Base URL(separate multiple sources with commas)", "type": "text", "required": True, "default": "https://aws.amazon.com/what-is/retrieval-augmented-generation/"}])
