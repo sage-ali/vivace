@@ -134,6 +134,24 @@ pytest vivace_integration/tests
 
 6. Deploy the service.
 
+## Testing the Integration on Telex.im
+
+1. **Add the Integration:**
+    - Go to the Telex.im App page.
+    - Add a new integration using the integration JSON found at the `/integration_setting` endpoint of your deployed service.
+
+2. **Configure the Integration:**
+    - In the integration settings, add the URL to the knowledge base. The URL can be a webpage or a link to download a PDF.
+
+3. **Send a Query:**
+    - Send a query to the channel where you have configured the integration.
+    - The integration will process the query and provide a response using Retrieval-Augmented Generation (RAG).
+
+### Example
+
+- Add `https://docs.telex.im/docs/intro, https://docs.telex.im/docs/Integrations/intro` to the knowledge base url settings.
+- Go to test channel and ask `What is telex and what are telex integrations?`
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any changes.
